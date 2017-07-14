@@ -13,6 +13,7 @@ ADD http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SW
 WORKDIR /usr/share/jenkins
 
 RUN unzip swarm-client-${SWARM_CLIENT_VERSION}.jar; \
+  printf '%s\n' "`cat META-INF/MANIFEST.MF`"; \
   echo 'Main-Class: hudson.plugins.swarm.Client' >> META-INF/MANIFEST.MF; \
   zip -r swarm-client-${SWARM_CLIENT_VERSION}.jar META-INF/MANIFEST.MF; \
   rm -rf META-INF hudson; \
