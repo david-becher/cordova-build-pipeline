@@ -7,17 +7,10 @@ ADD ./run.sh /run.sh
 
 ENV SWARM_CLIENT_VERSION 2.0
 
-ADD http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SWARM_CLIENT_VERSION}/swarm-client-${SWARM_CLIENT_VERSION}.jar \
+ADD http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SWARM_CLIENT_VERSION}/swarm-client-${SWARM_CLIENT_VERSION}-jar-with-dependencies.jar \
   /usr/share/jenkins/swarm-client-${SWARM_CLIENT_VERSION}.jar
 
-WORKDIR /usr/share/jenkins
-
-RUN unzip swarm-client-${SWARM_CLIENT_VERSION}.jar \
-  && echo 'Main-Class: hudson.plugins.swarm.Client' >> META-INF/MANIFEST.MF \
-  && sed -i '/^\s*$/d' META-INF/MANIFEST.MF \
-  && zip -r swarm-client-${SWARM_CLIENT_VERSION}.jar META-INF/MANIFEST.MF \
-  && rm -rf META-INF hudson \
-  && chmod 644 /usr/share/jenkins/swarm-client-${SWARM_CLIENT_VERSION}.jar
+RUN chmod 644 /usr/share/jenkins/swarm-client-${SWARM_CLIENT_VERSION}.jar
 
 RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-17.05.0-ce.tgz \
   && tar --strip-components=1 -xvzf docker-17.05.0-ce.tgz -C /usr/local/bin \
