@@ -1,5 +1,5 @@
 swarm-clients:
-  image: "davidbecher/jenkins-swarm:v0.2.1"
+  image: "davidbecher/jenkins-swarm:v0.3.0"
   user: "${user}"
   labels:
     io.rancher.scheduler.affinity:host_label_soft: ci=worker

@@ -12,18 +12,20 @@ ADD http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/${SW
 
 WORKDIR /usr/share/jenkins
 
-RUN unzip swarm-client-${SWARM_CLIENT_VERSION}.jar; \
-  printf '%s\n' "`cat META-INF/MANIFEST.MF`"; \
-  echo 'Main-Class: hudson.plugins.swarm.Client' >> META-INF/MANIFEST.MF; \
-  zip -r swarm-client-${SWARM_CLIENT_VERSION}.jar META-INF/MANIFEST.MF; \
-  rm -rf META-INF hudson; \
-  chmod 644 /usr/share/jenkins/swarm-client-${SWARM_CLIENT_VERSION}.jar
+RUN unzip swarm-client-${SWARM_CLIENT_VERSION}.jar \
+  && echo 'Main-Class: hudson.plugins.swarm.Client' >> META-INF/MANIFEST.MF \
+  && sed -i '/^\s*$/d' META-INF/MANIFEST.MF \
+  && zip -r swarm-client-${SWARM_CLIENT_VERSION}.jar META-INF/MANIFEST.MF \
+  && rm -rf META-INF hudson \
+  && chmod 644 /usr/share/jenkins/swarm-client-${SWARM_CLIENT_VERSION}.jar
 
 RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-17.05.0-ce.tgz \
-  && tar --strip-components=1 -xvzf docker-17.05.0-ce.tgz -C /usr/local/bin; \
-  chmod +x /usr/local/bin/docker
+  && tar --strip-components=1 -xvzf docker-17.05.0-ce.tgz -C /usr/local/bin \
+  && chmod +x /usr/local/bin/docker \
+  && rm docker-17.05.0-ce.tgz
 
-RUN curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose; chmod +x /usr/local/bin/docker-compose
+RUN curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose \
+  && chmod +x /usr/local/bin/docker-compose
 
 
 USER jenkins
