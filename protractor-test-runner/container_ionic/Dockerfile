@@ -7,4 +7,5 @@ RUN npm install -g ionic@2.1.18
 WORKDIR /var/app_content
 EXPOSE 8100
 
-ENTRYPOINT ["ionic serve"]
+ENTRYPOINT ["ionic"]
+CMD ["serve"]
