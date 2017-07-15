@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
 
-ionic serve --address localhost > /dev/null 2>&1 &
+nohup ionic serve --nobrowser --nolivereload --address localhost $> &
 tail -f /dev/null
