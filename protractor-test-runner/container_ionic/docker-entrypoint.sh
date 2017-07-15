@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
 
-nohup ionic serve --nobrowser --nolivereload --address localhost $> ionic.log &
+screen -d -m -L ionic serve --nobrowser --nolivereload --address=localhost
 tail -f /dev/null
