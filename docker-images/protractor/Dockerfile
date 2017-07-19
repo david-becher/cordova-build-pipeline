@@ -1,6 +1,4 @@
-FROM node:6.11.1-slim
+FROM mrsheepuk/protractor
 
-RUN npm install -g protractor@5.1.2
-
-ENTRYPOINT ["protractor"]
-CMD ["protractor-conf.js"]
+# Add service defintions for Xvfb, Selenium and Protractor runner
+ADD supervisord/*.conf /etc/supervisor/conf.d/
