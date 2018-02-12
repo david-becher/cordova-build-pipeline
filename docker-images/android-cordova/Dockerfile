@@ -57,17 +57,13 @@ ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}
 # Non-standard components: MIPS system images, preview versions, GDK (Google Glass) and Android Google TV require separate licenses, not accepted there
 RUN yes | sdkmanager --licenses
 
-# Platform tools
-RUN sdkmanager "platform-tools"
-
-# SDKs
+# Platform tools and SDKs
 # Please keep these in descending order!
 # The `yes` is for accepting all non-standard tool licenses.
+RUN yes | sdkmanager "platform-tools" "platforms;android-25" "build-tools;25.0.3"
 
-# Please keep all sections in descending order!
-RUN yes | sdkmanager "platforms;android-25" "build-tools;25.0.3"
-
-# Reference (only use SDKs actually used:
+# List of most important available packages:
+# "platform-tools"
 #  "platforms;android-27"
 #  "platforms;android-26"
 #  "platforms;android-25"
@@ -121,6 +117,3 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh \
 RUN npm install -g cordova@7.0.0 \
   && cordova telemetry off \
   && npm cache clear
-
-RUN rm -rf /var/lib/apt/lists/* \
-   && npm cache clear
