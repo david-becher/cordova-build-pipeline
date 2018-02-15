@@ -60,7 +60,7 @@ RUN yes | sdkmanager --licenses
 # Platform tools and SDKs
 # Please keep these in descending order!
 # The `yes` is for accepting all non-standard tool licenses.
-RUN yes | sdkmanager "platform-tools" "platforms;android-25" "build-tools;25.0.3"
+RUN yes | sdkmanager "platform-tools" "platforms;android-22" "build-tools;22.0.1"
 
 # List of most important available packages:
 # "platform-tools"
@@ -114,6 +114,6 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh \
   && rm nodesource_setup.sh \
   && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g cordova@7.0.0 \
+RUN npm install -g cordova@8.0.0 \
   && cordova telemetry off \
   && npm cache clear
