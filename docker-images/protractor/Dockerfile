@@ -8,3 +8,5 @@ RUN npm install -g ionic@2.1.18 \
 
 # Add service defintions for Xvfb, Selenium and Protractor runner
 ADD supervisord/*.conf /etc/supervisor/conf.d/
+
+RUN rm /etc/supervisor/conf.d/protractor.conf
