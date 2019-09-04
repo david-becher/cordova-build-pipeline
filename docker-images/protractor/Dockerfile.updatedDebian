@@ -1,0 +1,62 @@
+FROM debian:bullseye
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+  apt-get install -y curl && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+  apt-get install -y \
+    openjdk-11-jre \
+    xvfb \
+    libgconf-2-4 \
+    libexif12 \
+    chromium \
+    supervisor \
+    netcat-traditional \
+    curl \
+    ffmpeg && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /usr/local/nvm
+
+# nvm environment variables
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_VERSION 6.0.0
+
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+
+# add node and npm to path so the commands are available
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+
+# Install Protractor
+RUN npm install -g protractor@4.0.4
+
+# Install Selenium and Chrome driver
+RUN webdriver-manager update
+
+# Add a non-privileged user for running Protrator
+RUN adduser --home /project --uid 1100 \
+  --disabled-login --disabled-password --gecos node node
+
+# Add main configuration file
+ADD supervisor.conf /etc/supervisor/supervisor.conf
+
+# Add service defintions for Xvfb, Selenium and Protractor runner
+ADD supervisord/*.conf /etc/supervisor/conf.d/
+
+# Container's entry point, executing supervisord in the foreground
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisor.conf"]
+
+RUN apt-get update && apt-get install -y procps \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g ionic@2.1.18 \
+  && npm cache clean
+
+# Add service defintions for Xvfb, Selenium and Protractor runner
+ADD supervisord/*.conf /etc/supervisor/conf.d/
